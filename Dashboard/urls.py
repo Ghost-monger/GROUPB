@@ -21,5 +21,6 @@ from Dashboard import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.dashboard, name='dashboard')
+    path('', views.dashboard, name='dashboard'),
+    path('addstudent/',views.add_student, name='add_student')
 ]
