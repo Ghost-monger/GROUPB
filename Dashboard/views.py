@@ -9,6 +9,7 @@ def dashboard(request):
     return render(request, 'dashboard.html', {'students': students})
 def add_student(request):
     if request.method == 'POST':
+        image = request.FILES.get('image')
         name = request.POST.get('name')
         course = request.POST.get('course')
         age = request.POST.get('age')
@@ -17,6 +18,7 @@ def add_student(request):
         date = request.POST.get('date')
 
         Student.objects.create(
+            image = image,
             name=name,
             course=course,
             age=age,
@@ -35,7 +37,14 @@ def update_student(request,id):
         student.age = request.POST.get('age')
         student.email = request.POST.get('email')
         student.gender = request.POST.get('gender','').capitalize()
-        student.date = request.POST.get('date')
+        date_value = request.POST.get('date')
+
+        if date_value == "":
+            date_value = None
+
+        student.date = date_value
+        student.save()
+
         student.save()
         return redirect('dashboard')
     return render(request, 'update_student.html', {'student': student})
