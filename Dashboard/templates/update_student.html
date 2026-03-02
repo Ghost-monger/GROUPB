@@ -19,15 +19,19 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         {% if student.image %}
                          <div class="mb-3">
-                            <label class="form-label">Current image</label>
+                            <label class="form-label">Current Image</label>
                              <img src="{{ student.image.url }}" alt="" width="100" class="card-img-top" style="height: 200px;object-fit:cover rounded mb-2">
                         </div>
                         {% endif%}
+                        <div class="mb-3">
+                            <label>Change Image:</label>
+                            <input type="file" name="image" class="form-control">
+                        </div>
 
                         <div class="mb-3">
                             <label class="form-label">Full Name</label>

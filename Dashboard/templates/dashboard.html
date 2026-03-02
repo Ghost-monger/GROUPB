@@ -47,8 +47,14 @@
                         <h6 class="card-subtitle mb-2 text-muted"><strong>Course:</strong>{{ student.course }}</h6>
                         <p class="card-text"><strong>Age:</strong>{{ student.age }}<br><strong>Email:</strong>{{ student.email }}<br><strong>Gender:</strong>{{student.gender}}<br><strong>Date:</strong>{{ student.date }}</p>
                         <div class="card-actions">
-                            <a href="{% url 'update_student' student.id %}" class="btn btn-sm btn-primary">Edit</a>
-                            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                            <a href="{% url 'update_student' student.id %}" class="btn btn-sm btn-primary">Edit</a><br><br>
+                            <form method="POST" action="{% url 'delete_student' student.id %}">
+                                    {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Delete {{ student.name }}?')">
+                                        Delete
+                                        </button>
+                            </form>
                     </div>
                 </div>
             </div>

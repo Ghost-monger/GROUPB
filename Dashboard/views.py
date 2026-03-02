@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import login
 from Dashboard.models import Student
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def dashboard(request):
     students = Student.objects.all()
     return render(request, 'dashboard.html', {'students': students})
@@ -32,6 +36,8 @@ def add_student(request):
 def update_student(request,id):
     student = get_object_or_404(Student, id=id)
     if request.method == 'POST':
+        if request.FILES.get('image'):
+            student.image = request.FILES.get('image')
         student.name = request.POST.get('name')
         student.course = request.POST.get('course')
         student.age = request.POST.get('age')
@@ -45,6 +51,29 @@ def update_student(request,id):
         student.date = date_value
         student.save()
 
-        student.save()
         return redirect('dashboard')
     return render(request, 'update_student.html', {'student': student})
+
+def delete_student(request, id):
+    student = get_object_or_404(Student, id=id)
+    if request.method == 'POST':
+        student.delete()
+    return redirect('dashboard')
+
+def signup(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists!')
+            return redirect('signup')
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            email=email
+        )
+        login(request,user)
+        return redirect('dashboard')
+    return render(request, 'sign_up.html')
