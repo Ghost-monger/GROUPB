@@ -6,6 +6,396 @@
     <title>Add Student</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/main.css'%}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jjk-black: #0a0a0f;
+            --jjk-dark: #10101a;
+            --jjk-purple: #5b2d8e;
+            --jjk-violet: #7c3aed;
+            --jjk-glow: #9d5cff;
+            --jjk-blue-dark: #1a1a3e;
+            --jjk-accent: #c084fc;
+            --jjk-red: #dc2626;
+            --jjk-gold: #f59e0b;
+            --jjk-text: #e2d9f3;
+            --jjk-muted: #8b7aa8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--jjk-black);
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(91, 45, 142, 0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(124, 58, 237, 0.12) 0%, transparent 60%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%235b2d8e' fill-opacity='0.04'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            min-height: 100vh;
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--jjk-text);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Cursed energy floating orbs */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatOrb 8s ease-in-out infinite;
+        }
+
+        body::before {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        body::after {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(91, 45, 142, 0.06) 0%, transparent 70%);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -4s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.05); }
+        }
+
+        @keyframes cursedPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(157, 92, 255, 0.3), 0 0 30px rgba(124, 58, 237, 0.1); }
+            50% { box-shadow: 0 0 25px rgba(157, 92, 255, 0.5), 0 0 50px rgba(124, 58, 237, 0.2); }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { border-color: rgba(124, 58, 237, 0.4); }
+            50% { border-color: rgba(157, 92, 255, 0.8); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes runeFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
+            50% { transform: translateY(-10px) rotate(5deg); opacity: 0.25; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Floating rune decorations */
+        .container::before {
+            content: '呪';
+            position: absolute;
+            top: 20px;
+            right: -20px;
+            font-size: 120px;
+            color: var(--jjk-purple);
+            opacity: 0.06;
+            font-family: serif;
+            animation: runeFloat 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(16, 16, 26, 0.97) 0%, rgba(26, 26, 62, 0.95) 100%);
+            border: 1px solid rgba(124, 58, 237, 0.35);
+            border-radius: 2px;
+            animation: cursedPulse 4s ease-in-out infinite, slideDown 0.6s ease forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Corner rune marks */
+        .card::before,
+        .card::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--jjk-glow);
+            border-style: solid;
+            opacity: 0.6;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .card::before {
+            top: 8px; left: 8px;
+            border-width: 2px 0 0 2px;
+        }
+        .card::after {
+            bottom: 8px; right: 8px;
+            border-width: 0 2px 2px 0;
+        }
+
+        /* Scan line effect */
+        .card .card-body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--jjk-glow), transparent);
+            animation: scanLine 3s linear infinite;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes scanLine {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, #2d0a5e 0%, #1a0a40 40%, #3b1278 100%) !important;
+            border-bottom: 2px solid var(--jjk-violet);
+            padding: 1.2rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 40px,
+                rgba(157, 92, 255, 0.04) 40px,
+                rgba(157, 92, 255, 0.04) 41px
+            );
+        }
+
+        .card-header::after {
+            content: '⛧';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.4rem;
+            opacity: 0.4;
+            color: var(--jjk-accent);
+            animation: runeFloat 4s ease-in-out infinite;
+        }
+
+        .card-header h4 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff !important;
+            text-shadow: 0 0 15px rgba(157, 92, 255, 0.8), 0 0 30px rgba(124, 58, 237, 0.4);
+            letter-spacing: 0.05em;
+            margin-bottom: 0 !important;
+        }
+
+        .card-body {
+            background: transparent;
+            padding: 1.8rem;
+            position: relative;
+        }
+
+        .mb-3 {
+            margin-bottom: 1.2rem !important;
+            position: relative;
+        }
+
+        .form-label {
+            color: var(--jjk-accent);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        /* Bullet mark before labels */
+        .form-label::before {
+            content: '▸ ';
+            color: var(--jjk-violet);
+            font-size: 0.75rem;
+        }
+
+        .form-control {
+            background: rgba(10, 10, 20, 0.8) !important;
+            border: 1px solid rgba(124, 58, 237, 0.3) !important;
+            border-radius: 2px !important;
+            color: var(--jjk-text) !important;
+            font-family: 'Rajdhani', sans-serif !important;
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+            padding: 0.55rem 0.9rem !important;
+            transition: all 0.3s ease !important;
+            animation: borderGlow 4s ease-in-out infinite;
+        }
+
+        .form-control:focus {
+            background: rgba(26, 10, 64, 0.9) !important;
+            border-color: var(--jjk-glow) !important;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2), 0 0 15px rgba(157, 92, 255, 0.15) !important;
+            color: #ffffff !important;
+            outline: none !important;
+        }
+
+        .form-control::placeholder {
+            color: var(--jjk-muted) !important;
+        }
+
+        input[type="file"].form-control {
+            padding: 0.45rem 0.9rem !important;
+            cursor: pointer;
+        }
+
+        input[type="file"].form-control::-webkit-file-upload-button {
+            background: linear-gradient(135deg, var(--jjk-purple), var(--jjk-violet));
+            border: none;
+            border-radius: 2px;
+            color: white;
+            padding: 4px 12px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            margin-right: 10px;
+            text-transform: uppercase;
+        }
+
+        .card-img-top {
+            border: 1px solid rgba(124, 58, 237, 0.5) !important;
+            border-radius: 2px !important;
+            filter: brightness(0.9) contrast(1.05);
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .card-img-top:hover {
+            filter: brightness(1) contrast(1.1);
+            border-color: var(--jjk-glow) !important;
+            box-shadow: 0 0 15px rgba(157, 92, 255, 0.3);
+        }
+
+        /* Divider between image and form */
+        .mb-3:first-child {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.15);
+        }
+
+        .d-flex.justify-content-between {
+            margin-top: 1.8rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(124, 58, 237, 0.2);
+            position: relative;
+        }
+
+        .d-flex.justify-content-between::before {
+            content: '— 呪術 —';
+            position: absolute;
+            top: -0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            color: var(--jjk-muted);
+            letter-spacing: 0.2em;
+            background: rgba(16, 16, 26, 0.97);
+            padding: 0 12px;
+            white-space: nowrap;
+        }
+
+        .btn-secondary {
+            background: transparent !important;
+            border: 1px solid rgba(139, 122, 168, 0.5) !important;
+            color: var(--jjk-muted) !important;
+            font-family: 'Rajdhani', sans-serif !important;
+            font-weight: 600 !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.1em !important;
+            text-transform: uppercase !important;
+            border-radius: 2px !important;
+            padding: 0.5rem 1.4rem !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(139, 122, 168, 0.1) !important;
+            border-color: var(--jjk-muted) !important;
+            color: var(--jjk-text) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4a1a7a 0%, var(--jjk-violet) 50%, #5b2d8e 100%) !important;
+            border: 1px solid var(--jjk-glow) !important;
+            color: #ffffff !important;
+            font-family: 'Rajdhani', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.12em !important;
+            text-transform: uppercase !important;
+            border-radius: 2px !important;
+            padding: 0.5rem 1.6rem !important;
+            transition: all 0.3s ease !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.08) 50%, transparent 60%);
+            transition: all 0.5s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5b2d8e 0%, var(--jjk-glow) 50%, #7c3aed 100%) !important;
+            box-shadow: 0 0 20px rgba(157, 92, 255, 0.5), 0 4px 15px rgba(91, 45, 142, 0.4) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .btn-primary:hover::before {
+            top: 100%;
+            left: 100%;
+        }
+
+        .btn-primary:active {
+            transform: translateY(0) !important;
+        }
+
+        /* Shadow for the whole card */
+        .shadow {
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(91, 45, 142, 0.15) !important;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--jjk-black); }
+        ::-webkit-scrollbar-thumb { background: var(--jjk-purple); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--jjk-violet); }
+    </style>
 </head>
 <body>
 

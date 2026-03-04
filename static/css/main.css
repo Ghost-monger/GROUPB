@@ -11,3 +11,382 @@
         .card-actions a {
             margin-right: 5px;
         }
+/* ============================================================
+   SUKUNA BLACK FLASH — main.css
+   Global interactive styles applied across all templates
+   ============================================================ */
+
+:root {
+    --bf-black: #080608;
+    --bf-dark: #0f0a0d;
+    --bf-card: #120d10;
+    --bf-crimson: #8b0000;
+    --bf-red: #c0152a;
+    --bf-flash: #e8001a;
+    --bf-glow: #ff1a35;
+    --bf-gold: #c9a84c;
+    --bf-text: #e8dde2;
+    --bf-muted: #7a6068;
+    --bf-border: rgba(192, 21, 42, 0.35);
+}
+
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+
+* {
+    cursor: none !important;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--bf-flash);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, background 0.2s ease;
+    box-shadow: 0 0 10px var(--bf-flash), 0 0 20px rgba(232, 0, 26, 0.5);
+    left: var(--cx, -100px);
+    top: var(--cy, -100px);
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(232, 0, 26, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: left 0.12s ease, top 0.12s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+    left: var(--cx, -100px);
+    top: var(--cy, -100px);
+}
+
+
+/* ============================================================
+   PAGE ENTRANCE — fade + rise on load
+   ============================================================ */
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+        filter: brightness(0.4);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: brightness(1);
+    }
+}
+
+body {
+    animation: pageEnter 0.7s ease forwards;
+}
+
+
+/* ============================================================
+   CURSED ENERGY RIPPLE — click anywhere
+   ============================================================ */
+
+.ripple {
+    position: fixed;
+    border-radius: 50%;
+    width: 6px;
+    height: 6px;
+    background: transparent;
+    border: 2px solid var(--bf-flash);
+    pointer-events: none;
+    z-index: 99990;
+    transform: translate(-50%, -50%) scale(0);
+    animation: rippleOut 0.7s ease forwards;
+}
+
+@keyframes rippleOut {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.9; border-color: var(--bf-flash); }
+    60%  { transform: translate(-50%, -50%) scale(14); opacity: 0.3; border-color: var(--bf-crimson); }
+    100% { transform: translate(-50%, -50%) scale(20); opacity: 0; }
+}
+
+
+/* ============================================================
+   NAVBAR — slide down + glow line sweep
+   ============================================================ */
+
+@keyframes navbarDrop {
+    from { transform: translateY(-100%); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+}
+
+.navbar {
+    animation: navbarDrop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Sweeping highlight across navbar on load */
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: -100%;
+    width: 60%;
+    background: linear-gradient(90deg, transparent, rgba(232, 0, 26, 0.07), transparent);
+    animation: navSweep 2.5s ease 0.5s forwards;
+    pointer-events: none;
+}
+
+@keyframes navSweep {
+    from { left: -100%; }
+    to   { left: 150%; }
+}
+
+.navbar-brand {
+    position: relative;
+    display: inline-block;
+    transition: text-shadow 0.3s ease, letter-spacing 0.3s ease;
+}
+
+.navbar-brand:hover {
+    letter-spacing: 0.12em !important;
+    text-shadow: 0 0 20px rgba(232, 0, 26, 0.9), 0 0 40px rgba(139, 0, 0, 0.6) !important;
+}
+
+.nav-link {
+    transition: color 0.3s ease, text-shadow 0.3s ease, letter-spacing 0.3s ease !important;
+}
+
+.nav-link:hover {
+    letter-spacing: 0.15em !important;
+}
+
+
+/* ============================================================
+   CARDS — staggered entrance + tilt on hover
+   ============================================================ */
+
+@keyframes cardRise {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+.card {
+    animation: cardRise 0.5s ease forwards;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Stagger cards in a grid */
+.col-md-4:nth-child(1) .card { animation-delay: 0.05s; }
+.col-md-4:nth-child(2) .card { animation-delay: 0.15s; }
+.col-md-4:nth-child(3) .card { animation-delay: 0.25s; }
+.col-md-4:nth-child(4) .card { animation-delay: 0.35s; }
+.col-md-4:nth-child(5) .card { animation-delay: 0.45s; }
+.col-md-4:nth-child(6) .card { animation-delay: 0.55s; }
+
+.card:hover {
+    transform: translateY(-6px) scale(1.015) !important;
+    border-color: rgba(232, 0, 26, 0.65) !important;
+    box-shadow:
+        0 16px 50px rgba(0, 0, 0, 0.6),
+        0 0 25px rgba(232, 0, 26, 0.2),
+        0 0 60px rgba(139, 0, 0, 0.12) !important;
+}
+
+
+/* ============================================================
+   CARD IMAGE — desaturate to colour on hover
+   ============================================================ */
+
+.card-img-top {
+    filter: grayscale(40%) brightness(0.8) contrast(1.1) !important;
+    transition: filter 0.4s ease, transform 0.4s ease !important;
+    transform-origin: center center;
+}
+
+.card:hover .card-img-top {
+    filter: grayscale(0%) brightness(1) contrast(1.1) !important;
+    transform: scale(1.03) !important;
+}
+
+
+/* ============================================================
+   BUTTONS — pulse + shockwave on click
+   ============================================================ */
+
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.3s ease !important;
+}
+
+.btn:active {
+    transform: scale(0.96) !important;
+}
+
+/* Shockwave ring burst on click */
+.btn::after {
+    content: '';
+    position: absolute;
+    inset: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0;
+    transition: none;
+}
+
+.btn:active::after {
+    inset: -20%;
+    transform: scale(1);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* Idle crimson pulse on primary/success/danger buttons */
+@keyframes btnIdle {
+    0%, 100% { box-shadow: 0 0 8px rgba(232, 0, 26, 0.2); }
+    50%       { box-shadow: 0 0 18px rgba(232, 0, 26, 0.45); }
+}
+
+.btn-primary,
+.btn-success,
+.btn-danger {
+    animation: btnIdle 3s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   FORM INPUTS — focus lift + label highlight
+   ============================================================ */
+
+.mb-3,
+.mb-4 {
+    transition: transform 0.2s ease;
+}
+
+.mb-3:focus-within,
+.mb-4:focus-within {
+    transform: translateX(4px);
+}
+
+.mb-3:focus-within .form-label,
+.mb-4:focus-within .form-label {
+    color: var(--bf-red) !important;
+    text-shadow: 0 0 8px rgba(232, 0, 26, 0.3);
+    letter-spacing: 0.18em !important;
+    transition: all 0.3s ease;
+}
+
+.form-control,
+.form-select {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.2s ease !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    transform: scaleX(1.01) !important;
+}
+
+.input-group-text {
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
+
+/* ============================================================
+   ALERT — shake entrance
+   ============================================================ */
+
+@keyframes alertShake {
+    0%   { transform: translateX(0); }
+    15%  { transform: translateX(-8px); }
+    30%  { transform: translateX(7px); }
+    45%  { transform: translateX(-5px); }
+    60%  { transform: translateX(4px); }
+    75%  { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+}
+
+.alert {
+    animation: alertShake 0.5s ease forwards;
+    border-radius: 2px !important;
+}
+
+
+/* ============================================================
+   PAGE TRANSITIONS — anchor links fade out
+   ============================================================ */
+
+@keyframes pageFadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-12px); }
+}
+
+body.leaving {
+    animation: pageFadeOut 0.35s ease forwards;
+}
+
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar              { width: 5px; }
+::-webkit-scrollbar-track        { background: var(--bf-black); }
+::-webkit-scrollbar-thumb        { background: var(--bf-crimson); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover  { background: var(--bf-flash); }
+
+
+/* ============================================================
+   SELECTION HIGHLIGHT
+   ============================================================ */
+
+::selection {
+    background: rgba(139, 0, 0, 0.45);
+    color: #fff;
+}
+
+
+/* ============================================================
+   JAVASCRIPT HOOKS — injected via <script> below
+   Paste this <script> block at the bottom of each template
+   just before the closing </body> tag, after the Bootstrap JS.
+
+<script>
+  // Custom cursor
+  document.addEventListener('mousemove', e => {
+    document.documentElement.style.setProperty('--cx', e.clientX + 'px');
+    document.documentElement.style.setProperty('--cy', e.clientY + 'px');
+  });
+
+  // Cursed energy ripple on click
+  document.addEventListener('click', e => {
+    const r = document.createElement('div');
+    r.className = 'ripple';
+    r.style.left = e.clientX + 'px';
+    r.style.top  = e.clientY + 'px';
+    document.body.appendChild(r);
+    setTimeout(() => r.remove(), 750);
+  });
+
+  // Page fade-out on navigation
+  document.querySelectorAll('a[href]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('javascript')) return;
+      e.preventDefault();
+      document.body.classList.add('leaving');
+      setTimeout(() => window.location.href = href, 340);
+    });
+  });
+</script>
+   ============================================================ */
